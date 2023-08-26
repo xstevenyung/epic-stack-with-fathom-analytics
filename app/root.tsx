@@ -47,6 +47,7 @@ import { ClientHintCheck, getHints, useHints } from './utils/client-hints.tsx'
 import { getConfetti } from './utils/confetti.server.ts'
 import { prisma } from './utils/db.server.ts'
 import { getEnv } from './utils/env.server.ts'
+import { FathomScript, useTrackPageview } from './utils/fathom.tsx'
 import {
 	combineHeaders,
 	getDomainUrl,
@@ -231,6 +232,7 @@ function Document({
 				<ScrollRestoration nonce={nonce} />
 				<Scripts nonce={nonce} />
 				<LiveReload nonce={nonce} />
+				<FathomScript nonce={nonce} data-site={env.FATHOM_ANALYTICS_SITE_ID} />
 			</body>
 		</html>
 	)
@@ -243,6 +245,7 @@ function App() {
 	const theme = useTheme()
 	const matches = useMatches()
 	const isOnSearchPage = matches.find(m => m.id === 'routes/users+/index')
+	useTrackPageview()
 
 	return (
 		<Document nonce={nonce} theme={theme} env={data.ENV}>

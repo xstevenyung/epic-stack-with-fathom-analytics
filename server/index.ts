@@ -108,17 +108,23 @@ app.use(
 				'connect-src': [
 					MODE === 'development' ? 'ws:' : null,
 					process.env.SENTRY_DSN ? '*.ingest.sentry.io' : null,
+					process.env.FATHOM_ANALYTICS_SITE_ID ? 'cdn.usefathom.com' : null,
 					"'self'",
 				].filter(Boolean),
 				'font-src': ["'self'"],
 				'frame-src': ["'self'"],
-				'img-src': ["'self'", 'data:'],
+				'img-src': [
+					process.env.FATHOM_ANALYTICS_SITE_ID ? 'cdn.usefathom.com' : null,
+					"'self'",
+					'data:',
+				].filter(Boolean),
 				'script-src': [
+					process.env.FATHOM_ANALYTICS_SITE_ID ? 'cdn.usefathom.com' : null,
 					"'strict-dynamic'",
 					"'self'",
 					// @ts-expect-error
 					(_, res) => `'nonce-${res.locals.cspNonce}'`,
-				],
+				].filter(Boolean),
 				'script-src-attr': [
 					// @ts-expect-error
 					(_, res) => `'nonce-${res.locals.cspNonce}'`,
